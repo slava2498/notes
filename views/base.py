@@ -20,24 +20,26 @@ def start(update, context):
 		data = data[1]
 		return '{}_{}'.format(step, data)
 	else:
-		buttons = [
-				InlineKeyboardButton("Тайминг", callback_data='100_1'),
-		]
-		keyboard = settings.constructor(buttons, settings.COUNT_ROW)
-		reply_markup = InlineKeyboardMarkup(keyboard)
+		reply_keyboard = [['⏰ Тайминг']]
 		update.message.reply_text(
 			"Тайминг (напоминания, уведомления, сообщения)",
-			reply_markup=reply_markup
+			reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
 		)
 		return 'START'
 
 
 def end(update, context):
-	"""Returns `ConversationHandler.END`, which tells the
-	ConversationHandler that the conversation is over"""
 	query = update.callback_query
 	query.answer()
+	buttons = [
+			InlineKeyboardButton("⏰ Тайминг", callback_data='100_1'),
+	]
+	keyboard = settings.constructor(buttons, settings.COUNT_ROW)
+	reply_markup = InlineKeyboardMarkup(keyboard)
 	query.edit_message_text(
-		text="See you next time!"
+		"Тайминг (напоминания, уведомления, сообщения)",
+		reply_markup=reply_markup,
+		parse_mode='Markdown'
 	)
-	return ConversationHandler.END
+	return 'START'
+
